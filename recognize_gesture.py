@@ -1,15 +1,13 @@
 import cv2, pickle
 import numpy as np
 import tensorflow as tf
-#from cnn_tf import cnn_model_fn
 import os
-import sqlite3
 import time
 from keras.models import load_model
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 tf.logging.set_verbosity(tf.logging.ERROR)
-classifier = tf.estimator.Estimator(model_dir="tmp/cnn_model2", model_fn=cnn_model_fn)
+#classifier = tf.estimator.Estimator(model_dir="tmp/cnn_model2", model_fn=cnn_model_fn)
 prediction = None
 model = load_model('cnn_model_keras2.h5')
 
@@ -24,17 +22,6 @@ def tf_process_image(img):
 	img = np.array(img, dtype=np.float32)
 	np_array = np.array(img)
 	return np_array
-
-def tf_predict(classifier, image):
-	'''
-	need help with prediction using tensorflow
-	'''
-	global prediction
-	processed_array = tf_process_image(image)
-	pred_input_fn = tf.estimator.inputs.numpy_input_fn(x={"x":processed_array}, shuffle=False)
-	pred = classifier.predict(input_fn=pred_input_fn)
-	prediction = next(pred)
-	print(prediction)
 
 def keras_process_image(img):
 	img = cv2.resize(img, (image_x, image_y))
